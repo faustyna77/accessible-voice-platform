@@ -208,9 +208,9 @@ export default function EditAgentModal({ assistant, onClose, onSave }: EditAgent
                     className="w-full bg-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500"
                   >
                     <option value="Elliot">Elliot</option>
-                    <option value="Kylie">Kylie</option>
-                    <option value="Lily">Lily</option>
-                    <option value="Harry">Harry</option>
+                    <option value="Tara">Tara</option>
+                    <option value="Leah">Leah</option>
+                    <option value="Dan">Dan</option>
                   </select>
                 ) : (
                   <input

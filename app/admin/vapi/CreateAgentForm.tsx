@@ -180,9 +180,10 @@ export default function CreateAgentForm({ onAgentCreated }: CreateAgentFormProps
                 >
                   <optgroup label="Angielskie">
                     <option value="Elliot">Elliot (mężczyzna)</option>
-                    <option value="Kylie">Kylie (kobieta)</option>
-                    <option value="Lily">Lily (kobieta)</option>
-                    <option value="Harry">Harry (mężczyzna)</option>
+                     <option value="Elliot">Elliot</option>
+                    <option value="Tara">Tara</option>
+                    <option value="Leah">Leah</option>
+                    <option value="Dan">Dan</option>
                   </optgroup>
                 </select>
               )}
