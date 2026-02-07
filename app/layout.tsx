@@ -16,7 +16,7 @@ const monaSans = Mona_Sans({
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className="dark">
-       <body className={`${monaSans.className} antialiased pattern`}>
+      <body className={`${monaSans.className} antialiased pattern`}>
         <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
