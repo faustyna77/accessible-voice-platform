@@ -16,7 +16,6 @@ export default function VoiceAssistantPage() {
 
   const VAPI_PUBLIC_API_KEY = process.env.NEXT_PUBLIC_VAPI_API_KEY || '';
 
-  // Pobierz listę asystentów przy załadowaniu strony
   useEffect(() => {
     fetchAssistants();
   }, []);
@@ -25,11 +24,10 @@ export default function VoiceAssistantPage() {
     try {
       const res = await fetch('/api/vapi/assistants');
       const data = await res.json();
-      
+
       if (data.success && data.assistants.length > 0) {
         setAssistants(data.assistants);
-        // Automatycznie wybierz pierwszego asystenta
-        setSelectedAssistant(data.assistants[0]);
+        setSelectedAssistant(data.assistants[0]); // od razu wybiera pierwszego
       }
     } catch (err) {
       console.error('Błąd pobierania asystentów:', err);
@@ -40,34 +38,26 @@ export default function VoiceAssistantPage() {
 
   return (
     <ProtectedRoute>
-      <div className="relative min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-black text-white py-12 px-4 flex flex-col items-center justify-center overflow-hidden">
-        
-        <div className="relative z-10 container mx-auto max-w-5xl space-y-8">
-          
+      <div className="min-h-screen bg-gray-900 text-white p-8">
+        <div className="max-w-5xl mx-auto space-y-6">
           {/* Header */}
-          <div className="text-center">
-            <h1 className="text-4xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-violet-500 drop-shadow-md mb-2">
-              🎤 Asystent Głosowy AI
-            </h1>
-            <p className="text-gray-400 text-lg">
+          <div>
+            <h1 className="text-4xl font-bold mb-2"> Asystent Głosowy AI</h1>
+            <p className="text-gray-400">
               Komunikuj się głosowo ze swoimi urządzeniami – naturalnie i intuicyjnie
             </p>
           </div>
 
-          {/* Loading state */}
           {loading ? (
-            <div className="text-center py-12">
-              <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500"></div>
-              <p className="mt-4 text-gray-400">Ładowanie asystentów...</p>
+            <div className="bg-gray-800 rounded-xl p-12 text-center">
+              <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mb-4"></div>
+              <p className="text-gray-400">Ładowanie asystentów...</p>
             </div>
           ) : (
             <>
               {/* Wybór asystenta */}
               <div className="bg-gray-900/60 backdrop-blur-lg border border-gray-800 rounded-2xl shadow-2xl p-6">
-                <h2 className="text-xl font-bold text-white mb-4">
-                  👤 Wybierz asystenta:
-                </h2>
-                
+                <h2 className="text-xl font-bold text-white mb-4">👤 Wybierz asystenta:</h2>
                 {assistants.length === 0 ? (
                   <div className="text-center py-8 text-gray-400">
                     Brak dostępnych asystentów. Dodaj asystenta w panelu admina.
@@ -84,16 +74,10 @@ export default function VoiceAssistantPage() {
                             : 'bg-gray-800/60 hover:bg-gray-800 border border-gray-700'
                         }`}
                       >
-                        <div className="text-white font-bold text-lg mb-1">
-                          {assistant.name || 'Bez nazwy'}
-                        </div>
-                        <div className="text-gray-300 text-sm">
-                          ID: {assistant.id.slice(0, 8)}...
-                        </div>
+                        <div className="text-white font-bold text-lg mb-1">{assistant.name || 'Bez nazwy'}</div>
+                        <div className="text-gray-300 text-sm">ID: {assistant.id.slice(0, 8)}...</div>
                         {selectedAssistant?.id === assistant.id && (
-                          <div className="mt-2 text-indigo-200 text-sm font-medium">
-                            ✓ Wybrany
-                          </div>
+                          <div className="mt-2 text-indigo-200 text-sm font-medium">✓ Wybrany</div>
                         )}
                       </button>
                     ))}
@@ -101,18 +85,19 @@ export default function VoiceAssistantPage() {
                 )}
               </div>
 
-              {/* Komponent VapiAssistant */}
+              {/* Komponent rozmowy */}
               {selectedAssistant ? (
-                <div className="bg-gray-900/60 backdrop-blur-lg border border-gray-800 rounded-2xl shadow-2xl overflow-hidden">
-                  <div className="bg-gradient-to-r from-indigo-600 to-violet-600 p-4 text-white">
-                    <h3 className="text-lg font-bold">
-                      Rozmowa z: {selectedAssistant.name}
-                    </h3>
-                    <p className="text-sm text-indigo-100">
-                      Kliknij "Rozpocznij rozmowę" aby zacząć
+                <div className="bg-gray-800 rounded-xl overflow-hidden shadow-2xl">
+                  <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-6 text-white">
+                    <h3 className="text-2xl font-bold mb-2">🎤 Test rozmowy</h3>
+                    <p className="text-blue-100">
+                      Testowanie asystenta: <strong>{selectedAssistant.name}</strong>
+                    </p>
+                    <p className="text-sm text-blue-200 mt-2">
+                      Kliknij "Rozpocznij rozmowę" i zacznij mówić
                     </p>
                   </div>
-                  
+
                   <div className="p-6">
                     <VapiAssistant
                       publicApiKey={VAPI_PUBLIC_API_KEY}
@@ -121,36 +106,13 @@ export default function VoiceAssistantPage() {
                   </div>
                 </div>
               ) : (
-                <div className="bg-gray-900/60 backdrop-blur-lg border border-gray-800 rounded-2xl p-12 text-center">
+                <div className="bg-gray-800 rounded-xl p-12 text-center">
                   <div className="text-6xl mb-4">🤖</div>
                   <p className="text-gray-300 text-lg">
-                    Wybierz asystenta powyżej, aby rozpocząć rozmowę
+                    Wybierz asystenta powyżej, aby rozpocząć test
                   </p>
                 </div>
               )}
-
-              {/* Informacje */}
-              <div className="bg-gray-900/60 backdrop-blur-lg border border-gray-800 rounded-2xl p-6">
-                <h3 className="font-bold text-lg mb-3 text-indigo-400">💡 Jak to działa?</h3>
-                <ol className="space-y-2 text-gray-300">
-                  <li className="flex items-start gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 bg-indigo-600 rounded-full flex items-center justify-center text-sm font-bold">1</span>
-                    <span>Wybierz asystenta odpowiedniego dla Twoich potrzeb</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 bg-indigo-600 rounded-full flex items-center justify-center text-sm font-bold">2</span>
-                    <span>Kliknij "Rozpocznij rozmowę" i zezwól na dostęp do mikrofonu</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 bg-indigo-600 rounded-full flex items-center justify-center text-sm font-bold">3</span>
-                    <span>Mów naturalnie - asystent Cię zrozumie i wykona polecenia</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 bg-indigo-600 rounded-full flex items-center justify-center text-sm font-bold">4</span>
-                    <span>Oglądaj transkrypcję rozmowy w czasie rzeczywistym</span>
-                  </li>
-                </ol>
-              </div>
             </>
           )}
         </div>
